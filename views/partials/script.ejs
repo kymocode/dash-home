@@ -1,0 +1,61 @@
+<script src="javascripts/jquery.min.js"></script>
+<script src="javascripts/clock.js"></script>
+<script src="javascripts/socket.io.js"></script>
+<script src="javascripts/gauge.min.js"></script>
+<script src="javascripts/gauge.options.js"></script>
+<script src="javascripts/jsmpeg.min.js"></script>
+
+<script>
+  const socket = io();
+  startTime();
+
+  var target = document.getElementById('generation'); // your canvas element
+  var generation = new Gauge(target).setOptions(optsNormal); // create sexy gauge!
+  generation.maxValue = 5000; // set max gauge value
+  generation.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+  generation.animationSpeed = 32; // set animation speed (32 is default value)
+  var textRenderer = new TextRenderer(document.getElementById('generation-value'))
+  textRenderer.render = function(generation){
+     this.el.innerHTML = generation.displayedValue.toFixed(0) + " W"
+  };
+  generation.setTextField(textRenderer);
+  generation.set(0); // set actual value
+
+  var target = document.getElementById('usage'); // your canvas element
+  var usage = new Gauge(target).setOptions(optsUsage); // create sexy gauge!
+  usage.maxValue = 5000; // set max gauge value
+  usage.setMinValue(-5000);  // Prefer setter over gauge.minValue = 0
+  usage.animationSpeed = 32; // set animation speed (32 is default value)
+  var textRenderer = new TextRenderer(document.getElementById('usage-value'))
+  textRenderer.render = function(usage){
+     this.el.innerHTML = usage.displayedValue.toFixed(0) + " W"
+  };
+  usage.setTextField(textRenderer);usage.set(0); // set actual value
+
+  var target = document.getElementById('ambient'); // your canvas element
+  var ambient = new Gauge(target).setOptions(optsNormal); // create sexy gauge!
+  ambient.maxValue = 100; // set max gauge value
+  ambient.setMinValue(-10);  // Prefer setter over gauge.minValue = 0
+  ambient.animationSpeed = 32; // set animation speed (32 is default value)
+  var textRenderer = new TextRenderer(document.getElementById('ambient-value'))
+  textRenderer.render = function(ambient){
+     this.el.innerHTML = ambient.displayedValue.toFixed(1) + "°"
+  };
+  ambient.setTextField(textRenderer);
+  ambient.set(0); // set actual value
+
+  socket.on('generation', (msg) => {
+    generation.set(msg); // true
+  });
+  socket.on('usage', (msg) => {
+    usage.set(msg); // true
+  });
+  socket.on('ambient', (msg) => {
+    ambient.set(msg); // true
+  });
+  socket.on('camera', (msg) => {
+    window.location.hash='#camera'; // true
+  });
+
+
+</script>

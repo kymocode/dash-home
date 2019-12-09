@@ -1,0 +1,53 @@
+<script>
+  $(function() {
+
+    render(window.location.hash);
+
+    $(window).on('hashchange', function() {
+      render(window.location.hash);
+    });
+
+    function render(hash) {
+
+      var action = hash.split('=')[0];
+      var pagemap = {
+
+
+        '': function() {
+          $('#dash').show()
+          $('#Navbar').show()
+          $('#camera').hide()
+          $('#settings').hide()
+        },
+
+        '#camera': function() {
+          $('#dash').hide()
+          $('#Navbar').show()
+          $('#camera').show()
+          $('#cam1').show()
+          $('#settings').hide()
+        },
+
+        '#settings': function() {
+          $('#dash').hide()
+          $('#Navbar').show()
+          $('#camera').hide()
+          $('#settings').show()
+        },
+
+      }
+
+      if (pagemap[action]){
+        pagemap[action]();
+      } else {
+          // Redirect to home page
+        console.log('default redirect');
+        window.location.hash = '#';
+      }
+    }
+
+
+  });
+
+
+</script>
