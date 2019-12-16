@@ -18,7 +18,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-app.use(logger(':method :url :status :remote-addr :user-agent '));
+app.use(logger('dev'));
 // log all requests to access.log
 app.use(logger('common', {
   stream: fs.createWriteStream(path.join(__dirname, 'access.log'), { flags: 'a' })
